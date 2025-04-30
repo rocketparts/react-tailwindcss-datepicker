@@ -17,12 +17,9 @@ const TimePicker = ({ label, date, onChange }: TimePickerProps) => {
     const [minutes, setMinutes] = useState<number>(0);
     const [ampm, setAmPm] = useState<"AM" | "PM">("AM");
 
-    // Track if the time has been manually changed by the user
-    const [timeWasSet, setTimeWasSet] = useState(false);
-
     useEffect(() => {
         // If date is newly provided or changed, and user hasn't manually set time yet
-        if (date && !timeWasSet) {
+        if (date) {
             const hours24 = date.getHours();
             const isPM = hours24 >= 12;
             const hours12 = hours24 % 12 || 12;
@@ -42,18 +39,12 @@ const TimePicker = ({ label, date, onChange }: TimePickerProps) => {
             setHours(12);
             setMinutes(0);
             setAmPm("AM");
-            setTimeWasSet(false); // Reset flag when date becomes null
         }
-    }, [date, timeWasSet]);
+    }, [date]);
 
-    const updateTime = useCallback(() => {
+    useEffect(() => {
         // If date is null, create a new date object starting from today with time set to midnight
-        const newDate = date ? new Date(date) : new Date();
-
-        // If creating a new date, set it to midnight
-        if (!date) {
-            newDate.setHours(0, 0, 0, 0);
-        }
+        const newDate = date || new Date();
 
         const isPM = ampm === "PM";
         let hours24 = hours;
@@ -68,37 +59,22 @@ const TimePicker = ({ label, date, onChange }: TimePickerProps) => {
         newDate.setMinutes(minutes);
         newDate.setSeconds(0);
         onChange(newDate);
-    }, [date, hours, minutes, ampm, onChange]);
+    }, [hours, minutes, ampm, onChange]);
 
-    const handleHoursChange = useCallback(
-        (e: React.ChangeEvent<HTMLSelectElement>) => {
-            const newHours = parseInt(e.target.value, 10);
-            setHours(newHours);
-            setTimeWasSet(true); // Mark that user has manually set the time
-            setTimeout(updateTime, 0);
-        },
-        [updateTime, setTimeWasSet]
-    );
+    const handleHoursChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newHours = Number.parseInt(e.target.value, 10);
+        setHours(newHours);
+    }, []);
 
-    const handleMinutesChange = useCallback(
-        (e: React.ChangeEvent<HTMLSelectElement>) => {
-            const newMinutes = parseInt(e.target.value, 10);
-            setMinutes(newMinutes);
-            setTimeWasSet(true); // Mark that user has manually set the time
-            setTimeout(updateTime, 0);
-        },
-        [updateTime, setTimeWasSet]
-    );
+    const handleMinutesChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newMinutes = Number.parseInt(e.target.value, 10);
+        setMinutes(newMinutes);
+    }, []);
 
-    const handleAmPmChange = useCallback(
-        (e: React.ChangeEvent<HTMLSelectElement>) => {
-            const newAmPm = e.target.value as "AM" | "PM";
-            setAmPm(newAmPm);
-            setTimeWasSet(true); // Mark that user has manually set the time
-            setTimeout(updateTime, 0);
-        },
-        [updateTime, setTimeWasSet]
-    );
+    const handleAmPmChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newAmPm = e.target.value as "AM" | "PM";
+        setAmPm(newAmPm);
+    }, []);
 
     return (
         <div className="flex flex-col px-2 py-1">

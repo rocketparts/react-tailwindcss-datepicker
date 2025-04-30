@@ -30,8 +30,8 @@ import {
 } from "../libs/date";
 import { ColorKeys, DateType, DatepickerType, Period } from "../types";
 
-import Arrow from "./icons/Arrow";
 import VerticalDash from "./VerticalDash";
+import Arrow from "./icons/Arrow";
 
 const Datepicker = (props: DatepickerType) => {
     // Props
@@ -220,16 +220,6 @@ const Datepicker = (props: DatepickerType) => {
     useEffect(() => {
         if (value && value.startDate && value.endDate) {
             if (dateIsSameOrBefore(value.startDate, value.endDate, "date")) {
-                // Create date objects with proper time
-                const startDate = new Date(value.startDate);
-                const endDate = new Date(value.endDate);
-
-                // Always set times to midnight (00:00) for initial load
-                if (showTimePicker) {
-                    startDate.setHours(0, 0, 0);
-                    endDate.setHours(0, 0, 0);
-                }
-
                 // Format time strings in 12-hour format
                 const formatTimeString = (date: Date) => {
                     const hours = date.getHours();
@@ -239,19 +229,19 @@ const Datepicker = (props: DatepickerType) => {
                     return `${hours12}:${minutes.toString().padStart(2, "0")} ${ampm}`;
                 };
 
-                const startTimeFormat = formatTimeString(startDate);
-                const endTimeFormat = formatTimeString(endDate);
+                const startTimeFormat = formatTimeString(value.startDate);
+                const endTimeFormat = formatTimeString(value.endDate);
 
                 setPeriod({
-                    start: startDate,
-                    end: endDate
+                    start: value.startDate,
+                    end: value.endDate
                 });
 
                 setInputText(
-                    `${dateFormat(startDate, displayFormat, i18n)}${showTimePicker ? ` ${startTimeFormat}` : ""}${
+                    `${dateFormat(value.startDate, displayFormat, i18n)}${showTimePicker ? ` ${startTimeFormat}` : ""}${
                         asSingle
                             ? ""
-                            : ` ${separator} ${dateFormat(endDate, displayFormat, i18n)}${showTimePicker ? ` ${endTimeFormat}` : ""}`
+                            : ` ${separator} ${dateFormat(value.endDate, displayFormat, i18n)}${showTimePicker ? ` ${endTimeFormat}` : ""}`
                     }`
                 );
             }
@@ -299,13 +289,6 @@ const Datepicker = (props: DatepickerType) => {
         }
         return DEFAULT_COLOR;
     }, [primaryColor]);
-
-    // Function to create a date with specific time
-    const createDateWithMidnight = useCallback((inputDate: Date | null) => {
-        const date = inputDate ? new Date(inputDate) : new Date();
-        date.setHours(0, 0, 0, 0); // Set to midnight
-        return date;
-    }, []);
 
     // Time picker handlers
     const handleStartTimeChange = useCallback((newDate: Date) => {
@@ -438,6 +421,7 @@ const Datepicker = (props: DatepickerType) => {
               : defaultPopupClassName;
     }, [popupClassName]);
 
+    console.log(`Start date: ${period.start} End Date: ${period.end}`);
     return (
         <DatepickerContext.Provider value={contextValues}>
             <div className={containerClassNameOverload} ref={containerRef}>
@@ -470,7 +454,7 @@ const Datepicker = (props: DatepickerType) => {
                                         <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
                                             <TimePicker
                                                 label="Start time"
-                                                date={period.start || createDateWithMidnight(null)}
+                                                date={period.start}
                                                 onChange={handleStartTimeChange}
                                             />
                                         </div>
@@ -498,10 +482,7 @@ const Datepicker = (props: DatepickerType) => {
                                                 <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
                                                     <TimePicker
                                                         label="End time"
-                                                        date={
-                                                            period.end ||
-                                                            createDateWithMidnight(null)
-                                                        }
+                                                        date={period.end}
                                                         onChange={handleEndTimeChange}
                                                     />
                                                 </div>
@@ -516,7 +497,7 @@ const Datepicker = (props: DatepickerType) => {
                             <div className="flex items-center justify-center px-3 py-2 border-t border-gray-300 dark:border-gray-700">
                                 <TimePicker
                                     label="Start time"
-                                    date={period.start || createDateWithMidnight(null)}
+                                    date={period.start}
                                     onChange={handleStartTimeChange}
                                 />
                             </div>
