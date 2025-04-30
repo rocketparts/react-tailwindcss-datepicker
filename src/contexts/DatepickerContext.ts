@@ -62,6 +62,7 @@ interface DatepickerStore {
     separator: string;
 
     showFooter?: boolean;
+    showTimePicker?: boolean;
     startWeekOn?: WeekStringType | null;
     setInput: (value: HTMLInputElement | null) => void;
 
@@ -115,6 +116,7 @@ const DatepickerContext = createContext<DatepickerStore>({
 
     separator: DEFAULT_SEPARATOR,
     showFooter: false,
+    showTimePicker: false,
     startWeekOn: START_WEEK,
     setInput: () => {},
 

@@ -68,6 +68,7 @@ export interface DatepickerType {
     useRange?: boolean;
     showFooter?: boolean;
     showShortcuts?: boolean;
+    showTimePicker?: boolean;
     configs?: Configs;
     asSingle?: boolean;
     placeholder?: string;
