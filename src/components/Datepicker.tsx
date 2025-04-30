@@ -4,6 +4,7 @@ import Calendar from "../components/Calendar";
 import Footer from "../components/Footer";
 import Input from "../components/Input";
 import Shortcuts from "../components/Shortcuts";
+import TimePicker from "../components/TimePicker";
 import {
     COLORS,
     DATE_FORMAT,
@@ -27,7 +28,7 @@ import {
     nextMonthBy,
     previousMonthBy
 } from "../libs/date";
-import { Period, DatepickerType, ColorKeys, DateType } from "../types";
+import { ColorKeys, DateType, DatepickerType, Period } from "../types";
 
 import Arrow from "./icons/Arrow";
 import VerticalDash from "./VerticalDash";
@@ -64,6 +65,7 @@ const Datepicker = (props: DatepickerType) => {
         separator = DEFAULT_SEPARATOR,
         showFooter = false,
         showShortcuts = false,
+        showTimePicker = false,
         startFrom = null,
         startWeekOn = START_WEEK,
 
@@ -218,16 +220,38 @@ const Datepicker = (props: DatepickerType) => {
     useEffect(() => {
         if (value && value.startDate && value.endDate) {
             if (dateIsSameOrBefore(value.startDate, value.endDate, "date")) {
+                // Create date objects with proper time
+                const startDate = new Date(value.startDate);
+                const endDate = new Date(value.endDate);
+
+                // Always set times to midnight (00:00) for initial load
+                if (showTimePicker) {
+                    startDate.setHours(0, 0, 0);
+                    endDate.setHours(0, 0, 0);
+                }
+
+                // Format time strings in 12-hour format
+                const formatTimeString = (date: Date) => {
+                    const hours = date.getHours();
+                    const minutes = date.getMinutes();
+                    const ampm = hours >= 12 ? "PM" : "AM";
+                    const hours12 = hours % 12 || 12;
+                    return `${hours12}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+                };
+
+                const startTimeFormat = formatTimeString(startDate);
+                const endTimeFormat = formatTimeString(endDate);
+
                 setPeriod({
-                    start: value.startDate,
-                    end: value.endDate
+                    start: startDate,
+                    end: endDate
                 });
 
                 setInputText(
-                    `${dateFormat(value.startDate, displayFormat, i18n)}${
+                    `${dateFormat(startDate, displayFormat, i18n)}${showTimePicker ? ` ${startTimeFormat}` : ""}${
                         asSingle
                             ? ""
-                            : ` ${separator} ${dateFormat(value.endDate, displayFormat, i18n)}`
+                            : ` ${separator} ${dateFormat(endDate, displayFormat, i18n)}${showTimePicker ? ` ${endTimeFormat}` : ""}`
                     }`
                 );
             }
@@ -241,7 +265,7 @@ const Datepicker = (props: DatepickerType) => {
 
             setInputText("");
         }
-    }, [asSingle, value, displayFormat, separator, i18n]);
+    }, [asSingle, value, displayFormat, separator, i18n, showTimePicker]);
 
     useEffect(() => {
         if (startFrom && dateIsValid(startFrom)) {
@@ -275,6 +299,28 @@ const Datepicker = (props: DatepickerType) => {
         }
         return DEFAULT_COLOR;
     }, [primaryColor]);
+
+    // Function to create a date with specific time
+    const createDateWithMidnight = useCallback((inputDate: Date | null) => {
+        const date = inputDate ? new Date(inputDate) : new Date();
+        date.setHours(0, 0, 0, 0); // Set to midnight
+        return date;
+    }, []);
+
+    // Time picker handlers
+    const handleStartTimeChange = useCallback((newDate: Date) => {
+        setPeriod(prev => ({
+            ...prev,
+            start: newDate
+        }));
+    }, []);
+
+    const handleEndTimeChange = useCallback((newDate: Date) => {
+        setPeriod(prev => ({
+            ...prev,
+            end: newDate
+        }));
+    }, []);
 
     const contextValues = useMemo(() => {
         if (minDate && !dateIsValid(minDate)) {
@@ -329,6 +375,7 @@ const Datepicker = (props: DatepickerType) => {
             required,
             separator,
             showFooter,
+            showTimePicker,
             startWeekOn: startWeekOn || START_WEEK,
             toggleClassName,
             toggleIcon,
@@ -367,6 +414,7 @@ const Datepicker = (props: DatepickerType) => {
         inputRef,
         popoverDirection,
         required,
+        showTimePicker,
         firstGotoDate
     ]);
 
@@ -398,7 +446,7 @@ const Datepicker = (props: DatepickerType) => {
                     <Arrow ref={arrowRef} />
 
                     <div className="mt-2.5 shadow-sm border border-gray-300 px-1 py-0.5 bg-white dark:bg-slate-800 dark:text-white dark:border-slate-600 rounded-lg">
-                        <div className="flex flex-col lg:flex-row py-2">
+                        <div className="flex flex-col py-2 lg:flex-row">
                             {showShortcuts && <Shortcuts />}
 
                             <div
@@ -406,15 +454,27 @@ const Datepicker = (props: DatepickerType) => {
                                     showShortcuts ? "md:pl-2" : "md:pl-1"
                                 } pr-2 lg:pr-1`}
                             >
-                                <Calendar
-                                    date={firstDate}
-                                    onClickPrevious={previousMonthFirst}
-                                    onClickNext={nextMonthFirst}
-                                    changeMonth={changeFirstMonth}
-                                    changeYear={changeFirstYear}
-                                    minDate={minDate}
-                                    maxDate={maxDate}
-                                />
+                                <div className="flex flex-col">
+                                    <Calendar
+                                        date={firstDate}
+                                        onClickPrevious={previousMonthFirst}
+                                        onClickNext={nextMonthFirst}
+                                        changeMonth={changeFirstMonth}
+                                        changeYear={changeFirstYear}
+                                        minDate={minDate}
+                                        maxDate={maxDate}
+                                    />
+
+                                    {showTimePicker && useRange && (
+                                        <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
+                                            <TimePicker
+                                                label="Start time"
+                                                date={period.start || createDateWithMidnight(null)}
+                                                onChange={handleStartTimeChange}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
 
                                 {useRange && (
                                     <>
@@ -422,19 +482,44 @@ const Datepicker = (props: DatepickerType) => {
                                             <VerticalDash />
                                         </div>
 
-                                        <Calendar
-                                            date={secondDate}
-                                            onClickPrevious={previousMonthSecond}
-                                            onClickNext={nextMonthSecond}
-                                            changeMonth={changeSecondMonth}
-                                            changeYear={changeSecondYear}
-                                            minDate={minDate}
-                                            maxDate={maxDate}
-                                        />
+                                        <div className="flex flex-col">
+                                            <Calendar
+                                                date={secondDate}
+                                                onClickPrevious={previousMonthSecond}
+                                                onClickNext={nextMonthSecond}
+                                                changeMonth={changeSecondMonth}
+                                                changeYear={changeSecondYear}
+                                                minDate={minDate}
+                                                maxDate={maxDate}
+                                            />
+
+                                            {showTimePicker && (
+                                                <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
+                                                    <TimePicker
+                                                        label="End time"
+                                                        date={
+                                                            period.end ||
+                                                            createDateWithMidnight(null)
+                                                        }
+                                                        onChange={handleEndTimeChange}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
                                     </>
                                 )}
                             </div>
                         </div>
+
+                        {showTimePicker && asSingle && (
+                            <div className="flex items-center justify-center px-3 py-2 border-t border-gray-300 dark:border-gray-700">
+                                <TimePicker
+                                    label="Start time"
+                                    date={period.start || createDateWithMidnight(null)}
+                                    onChange={handleStartTimeChange}
+                                />
+                            </div>
+                        )}
 
                         {showFooter && <Footer />}
                     </div>

@@ -62,6 +62,7 @@ interface DatepickerStore {
     separator: string;
 
     showFooter?: boolean;
+    showTimePicker?: boolean;
     startWeekOn?: WeekStringType | null;
 
     toggleClassName?: ((className: string) => string) | string | null;
@@ -114,6 +115,7 @@ const DatepickerContext = createContext<DatepickerStore>({
 
     separator: DEFAULT_SEPARATOR,
     showFooter: false,
+    showTimePicker: false,
     startWeekOn: START_WEEK,
 
     toggleClassName: "",

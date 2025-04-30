@@ -26,6 +26,7 @@ export default function Playground() {
     const [useRange, setUseRange] = useState(true);
     const [showFooter, setShowFooter] = useState(false);
     const [showShortcuts, setShowShortcuts] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
     const [asSingle, setAsSingle] = useState(false);
     const [placeholder, setPlaceholder] = useState("");
     const [separator, setSeparator] = useState("~");
@@ -67,12 +68,15 @@ export default function Playground() {
                         console.log(e);
                         console.log("value", {
                             startDate: value?.startDate?.toLocaleDateString() || null,
-                            endDate: value?.endDate?.toLocaleDateString() || null
+                            endDate: value?.endDate?.toLocaleDateString() || null,
+                            startTime: value?.startTime || null,
+                            endTime: value?.endTime || null
                         });
                     }}
                     useRange={useRange}
                     showFooter={showFooter}
                     showShortcuts={showShortcuts}
+                    showTimePicker={showTimePicker}
                     configs={{
                         shortcuts: {
                             today: "Today",
@@ -185,6 +189,20 @@ export default function Playground() {
                             />
                             <label className="block" htmlFor="showShortcuts">
                                 Show Shortcuts
+                            </label>
+                        </div>
+                    </div>
+                    <div className="mb-2 w-1/2 sm:w-full">
+                        <div className="inline-flex items-center">
+                            <input
+                                type="checkbox"
+                                className="mr-2 rounded"
+                                id="showTimePicker"
+                                checked={showTimePicker}
+                                onChange={e => setShowTimePicker(e.target.checked)}
+                            />
+                            <label className="block" htmlFor="showTimePicker">
+                                Show Time Picker
                             </label>
                         </div>
                     </div>

@@ -28,6 +28,7 @@ export const DEFAULT_SEPARATOR = "~";
 export const LANGUAGE = "en";
 
 export const DATE_FORMAT = "YYYY-MM-DD";
+export const TIME_FORMAT = "h:mm A";
 
 export const START_WEEK: WeekStringType = "sun";
 
