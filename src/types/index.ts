@@ -9,6 +9,17 @@ export interface Period {
     end: DateType;
 }
 
+export interface TimeObject {
+    hours: number;
+    minutes: number;
+    ampm: "AM" | "PM";
+}
+
+export interface Time {
+    start: TimeObject;
+    end: TimeObject;
+}
+
 interface CustomShortcuts {
     [key: string]: ShortcutsItem;
 }

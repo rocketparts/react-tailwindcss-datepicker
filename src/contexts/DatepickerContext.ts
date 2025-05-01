@@ -18,7 +18,9 @@ import {
     PopoverDirectionType,
     ColorKeys,
     WeekStringType,
-    DateLookingType
+    DateLookingType,
+    TimeObject,
+    Time
 } from "../types";
 
 interface DatepickerStore {
@@ -64,6 +66,10 @@ interface DatepickerStore {
     showFooter?: boolean;
     showTimePicker?: boolean;
     startWeekOn?: WeekStringType | null;
+
+    // Time state
+    time: Time;
+    changeTime: (time: Partial<Time>) => void;
 
     toggleClassName?: ((className: string) => string) | string | null;
     toggleIcon?: (open: boolean) => ReactNode;
@@ -117,6 +123,13 @@ const DatepickerContext = createContext<DatepickerStore>({
     showFooter: false,
     showTimePicker: false,
     startWeekOn: START_WEEK,
+
+    // Default time state
+    time: {
+        start: { hours: 12, minutes: 0, ampm: "AM" },
+        end: { hours: 12, minutes: 0, ampm: "AM" }
+    },
+    changeTime: () => {},
 
     toggleClassName: "",
     toggleIcon: undefined,

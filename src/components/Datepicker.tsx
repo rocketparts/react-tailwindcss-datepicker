@@ -28,7 +28,7 @@ import {
     nextMonthBy,
     previousMonthBy
 } from "../libs/date";
-import { ColorKeys, DateType, DatepickerType, Period } from "../types";
+import { ColorKeys, DateType, DatepickerType, Period, Time, TimeObject } from "../types";
 
 import Arrow from "./icons/Arrow";
 import VerticalDash from "./VerticalDash";
@@ -92,6 +92,12 @@ const Datepicker = (props: DatepickerType) => {
     const [period, setPeriod] = useState<Period>({
         start: null,
         end: null
+    });
+    
+    // Time state
+    const [time, setTime] = useState<Time>({
+        start: { hours: 12, minutes: 0, ampm: "AM" },
+        end: { hours: 12, minutes: 0, ampm: "AM" }
     });
     const [dayHover, setDayHover] = useState<DateType>(null);
     const [inputText, setInputText] = useState<string>("");
@@ -300,20 +306,11 @@ const Datepicker = (props: DatepickerType) => {
         return DEFAULT_COLOR;
     }, [primaryColor]);
 
-    const handleStartTimeChange = useCallback((newDate: Date) => {
-        onChange({
-            startDate: newDate,
-            endDate: period.end
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const handleEndTimeChange = useCallback((newDate: Date) => {
-        onChange({
-            startDate: period.start,
-            endDate: newDate
-        });
+    const changeTime = useCallback((timeUpdate: Partial<Time>) => {
+        setTime(prev => ({
+            ...prev,
+            ...timeUpdate
+        }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -344,6 +341,7 @@ const Datepicker = (props: DatepickerType) => {
             changeDayHover: (newDay: DateType) => setDayHover(newDay),
             changeInputText: (newText: string) => setInputText(newText),
             changePeriod: (newPeriod: Period) => setPeriod(newPeriod),
+            changeTime, // Add time change function
             classNames,
             configs,
             containerClassName,
@@ -372,6 +370,7 @@ const Datepicker = (props: DatepickerType) => {
             showFooter,
             showTimePicker,
             startWeekOn: startWeekOn || START_WEEK,
+            time, // Add time state
             toggleClassName,
             toggleIcon,
             updateFirstDate: (newDate: Date) => firstGotoDate(newDate),
@@ -410,7 +409,9 @@ const Datepicker = (props: DatepickerType) => {
         popoverDirection,
         required,
         showTimePicker,
-        firstGotoDate
+        firstGotoDate,
+        time,
+        changeTime
     ]);
 
     const containerClassNameOverload = useMemo(() => {
@@ -465,7 +466,7 @@ const Datepicker = (props: DatepickerType) => {
                                             <TimePicker
                                                 label="Start time"
                                                 date={period.start}
-                                                onChange={handleStartTimeChange}
+                                                timeKey="start"
                                             />
                                         </div>
                                     )}
@@ -493,7 +494,7 @@ const Datepicker = (props: DatepickerType) => {
                                                     <TimePicker
                                                         label="End time"
                                                         date={period.end}
-                                                        onChange={handleEndTimeChange}
+                                                        timeKey="end"
                                                     />
                                                 </div>
                                             )}
@@ -508,7 +509,7 @@ const Datepicker = (props: DatepickerType) => {
                                 <TimePicker
                                     label="Start time"
                                     date={period.start}
-                                    onChange={handleStartTimeChange}
+                                    timeKey="start"
                                 />
                             </div>
                         )}
