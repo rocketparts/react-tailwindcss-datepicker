@@ -291,24 +291,22 @@ const Datepicker = (props: DatepickerType) => {
     }, [primaryColor]);
 
     // Time picker handlers
+
     const handleStartTimeChange = useCallback((newDate: Date) => {
-        onChange(
-            {
-                startDate: newDate,
-                endDate: period.end
-            },
-            input
-        );
+        onChange({
+            startDate: newDate,
+            endDate: period.end
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleEndTimeChange = useCallback((newDate: Date) => {
-        onChange(
-            {
-                startDate: period.end,
-                endDate: newDate
-            },
-            input
-        );
+        onChange({
+            startDate: period.start,
+            endDate: newDate
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const contextValues = useMemo(() => {

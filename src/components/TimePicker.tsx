@@ -59,6 +59,7 @@ const TimePicker = ({ label, date, onChange }: TimePickerProps) => {
         newDate.setMinutes(minutes);
         newDate.setSeconds(0);
         onChange(newDate);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hours, minutes, ampm, onChange]);
 
     const handleHoursChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
