@@ -1,6 +1,7 @@
 import { ColorKeys, Colors, DateLookingType, WeekStringType } from "../types";
 
 export const COLORS = [
+    "primary",
     "blue",
     "orange",
     "yellow",
@@ -21,7 +22,7 @@ export const COLORS = [
     "rose"
 ] as const;
 
-export const DEFAULT_COLOR: ColorKeys = "blue";
+export const DEFAULT_COLOR: ColorKeys = "primary";
 
 export const DEFAULT_SEPARATOR = "~";
 
@@ -44,6 +45,7 @@ export const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 // as described in Tailwind documentation https://tailwindcss.com/docs/content-configuration#dynamic-class-names
 export const BG_COLOR: Colors = {
     100: {
+        primary: "bg-primary-100",
         blue: "bg-blue-100",
         orange: "bg-orange-100",
         yellow: "bg-yellow-100",
@@ -63,6 +65,7 @@ export const BG_COLOR: Colors = {
         rose: "bg-rose-100"
     },
     200: {
+        primary: "bg-primary-200",
         blue: "bg-blue-200",
         orange: "bg-orange-200",
         yellow: "bg-yellow-200",
@@ -82,6 +85,7 @@ export const BG_COLOR: Colors = {
         rose: "bg-rose-200"
     },
     500: {
+        primary: "bg-primary-600",
         blue: "bg-blue-500",
         orange: "bg-orange-500",
         yellow: "bg-yellow-500",
@@ -101,6 +105,7 @@ export const BG_COLOR: Colors = {
         rose: "bg-rose-500"
     },
     hover: {
+        primary: "hover:bg-primary-700",
         blue: "hover:bg-blue-600",
         orange: "hover:bg-orange-600",
         yellow: "hover:bg-yellow-600",
@@ -123,6 +128,7 @@ export const BG_COLOR: Colors = {
 
 export const TEXT_COLOR: Colors = {
     500: {
+        primary: "text-primary-600",
         blue: "text-blue-500",
         orange: "text-orange-500",
         yellow: "text-yellow-500",
@@ -142,6 +148,7 @@ export const TEXT_COLOR: Colors = {
         rose: "text-rose-500"
     },
     600: {
+        primary: "text-primary-700 dark:text-primary-400 dark:hover:text-primary-400",
         blue: "text-blue-600 dark:text-blue-400 dark:hover:text-blue-400",
         orange: "text-orange-600 dark:text-orange-400 dark:hover:text-orange-400",
         yellow: "text-yellow-600 dark:text-yellow-400 dark:hover:text-yellow-400",
@@ -161,6 +168,7 @@ export const TEXT_COLOR: Colors = {
         rose: "text-rose-600 dark:text-rose-400 dark:hover:text-rose-400"
     },
     hover: {
+        primary: "hover:text-primary-700",
         blue: "hover:text-blue-700",
         orange: "hover:text-orange-700",
         yellow: "hover:text-yellow-700",
@@ -183,6 +191,7 @@ export const TEXT_COLOR: Colors = {
 
 export const BORDER_COLOR: Colors = {
     500: {
+        primary: "border-primary-600",
         blue: "border-blue-500",
         orange: "border-orange-500",
         yellow: "border-yellow-500",
@@ -202,6 +211,7 @@ export const BORDER_COLOR: Colors = {
         rose: "border-rose-500"
     },
     focus: {
+        primary: "focus:border-primary-500",
         blue: "focus:border-blue-500",
         orange: "focus:border-orange-500",
         yellow: "focus:border-yellow-500",
@@ -224,6 +234,7 @@ export const BORDER_COLOR: Colors = {
 
 export const RING_COLOR: Colors = {
     focus: {
+        primary: "focus:ring-primary-500",
         blue: "focus:ring-blue-500",
         orange: "focus:ring-orange-500",
         yellow: "focus:ring-yellow-500",
@@ -243,6 +254,7 @@ export const RING_COLOR: Colors = {
         rose: "focus:ring-rose-500"
     },
     "second-focus": {
+        primary: "focus:ring-primary-500/20",
         blue: "focus:ring-blue-500/20",
         orange: "focus:ring-orange-500/20",
         yellow: "focus:ring-yellow-500/20",
@@ -265,6 +277,7 @@ export const RING_COLOR: Colors = {
 
 export const BUTTON_COLOR: Colors = {
     focus: {
+        primary: "focus:ring-primary-600/50 focus:bg-primary-100/50",
         blue: "focus:ring-blue-500/50 focus:bg-blue-100/50",
         orange: "focus:ring-orange-500/50 focus:bg-orange-100/50",
         yellow: "focus:ring-yellow-500/50 focus:bg-yellow-100/50",
