@@ -60,7 +60,7 @@ const Datepicker = (props: DatepickerType) => {
         placeholder = null,
         popupClassName = null,
         popoverDirection = undefined,
-        primaryColor = "primary",
+        primaryColor = DEFAULT_COLOR,
 
         separator = DEFAULT_SEPARATOR,
         showFooter = false,
