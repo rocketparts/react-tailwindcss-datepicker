@@ -97,6 +97,16 @@ const Datepicker = (props: DatepickerType) => {
     const [inputText, setInputText] = useState<string>("");
     const [inputRef, setInputRef] = useState(createRef<HTMLInputElement>());
 
+    console.log(
+        "firstDate: " +
+            firstDate.toLocaleString() +
+            " secondDate: " +
+            secondDate.toLocaleString() +
+            " period.start: " +
+            period.start?.toLocaleString() +
+            " period.end: " +
+            period.end?.toLocaleString()
+    );
     // Custom Hooks use
     useOnClickOutside(containerRef, () => {
         const container = containerRef.current;
@@ -289,8 +299,6 @@ const Datepicker = (props: DatepickerType) => {
         }
         return DEFAULT_COLOR;
     }, [primaryColor]);
-
-    // Time picker handlers
 
     const handleStartTimeChange = useCallback((newDate: Date) => {
         onChange({
