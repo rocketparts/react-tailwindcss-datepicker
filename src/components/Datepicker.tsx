@@ -93,8 +93,6 @@ const Datepicker = (props: DatepickerType) => {
         start: null,
         end: null
     });
-    
-    // Time state
     const [time, setTime] = useState<Time>({
         start: { hours: 12, minutes: 0, ampm: "AM" },
         end: { hours: 12, minutes: 0, ampm: "AM" }
@@ -103,16 +101,6 @@ const Datepicker = (props: DatepickerType) => {
     const [inputText, setInputText] = useState<string>("");
     const [inputRef, setInputRef] = useState(createRef<HTMLInputElement>());
 
-    console.log(
-        "firstDate: " +
-            firstDate.toLocaleString() +
-            " secondDate: " +
-            secondDate.toLocaleString() +
-            " period.start: " +
-            period.start?.toLocaleString() +
-            " period.end: " +
-            period.end?.toLocaleString()
-    );
     // Custom Hooks use
     useOnClickOutside(containerRef, () => {
         const container = containerRef.current;
@@ -214,6 +202,27 @@ const Datepicker = (props: DatepickerType) => {
     );
     /* End Second */
 
+    // Specific handlers for each TimePicker instance
+    const changeStartTime = useCallback(
+        (newTimeObj: TimeObject) => {
+            setTime(prev => ({
+                ...prev,
+                start: newTimeObj
+            }));
+        },
+        [setTime]
+    );
+
+    const changeEndTime = useCallback(
+        (newTimeObj: TimeObject) => {
+            setTime(prev => ({
+                ...prev,
+                end: newTimeObj
+            }));
+        },
+        [setTime]
+    );
+
     // UseEffects & UseLayoutEffect
     useEffect(() => {
         const container = containerRef.current;
@@ -306,14 +315,6 @@ const Datepicker = (props: DatepickerType) => {
         return DEFAULT_COLOR;
     }, [primaryColor]);
 
-    const changeTime = useCallback((timeUpdate: Partial<Time>) => {
-        setTime(prev => ({
-            ...prev,
-            ...timeUpdate
-        }));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     const contextValues = useMemo(() => {
         if (minDate && !dateIsValid(minDate)) {
             /* eslint-disable */
@@ -341,7 +342,7 @@ const Datepicker = (props: DatepickerType) => {
             changeDayHover: (newDay: DateType) => setDayHover(newDay),
             changeInputText: (newText: string) => setInputText(newText),
             changePeriod: (newPeriod: Period) => setPeriod(newPeriod),
-            changeTime, // Add time change function
+            changeTime: (newTime: Time) => setTime(newTime),
             classNames,
             configs,
             containerClassName,
@@ -410,8 +411,7 @@ const Datepicker = (props: DatepickerType) => {
         required,
         showTimePicker,
         firstGotoDate,
-        time,
-        changeTime
+        time
     ]);
 
     const containerClassNameOverload = useMemo(() => {
@@ -465,8 +465,8 @@ const Datepicker = (props: DatepickerType) => {
                                         <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
                                             <TimePicker
                                                 label="Start time"
-                                                date={period.start}
-                                                timeKey="start"
+                                                timeObj={time.start}
+                                                onTimeChange={changeStartTime}
                                             />
                                         </div>
                                     )}
@@ -493,8 +493,8 @@ const Datepicker = (props: DatepickerType) => {
                                                 <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
                                                     <TimePicker
                                                         label="End time"
-                                                        date={period.end}
-                                                        timeKey="end"
+                                                        timeObj={time.end}
+                                                        onTimeChange={changeEndTime}
                                                     />
                                                 </div>
                                             )}
@@ -508,8 +508,8 @@ const Datepicker = (props: DatepickerType) => {
                             <div className="flex items-center justify-center px-3 py-2 border-t border-gray-300 dark:border-gray-700">
                                 <TimePicker
                                     label="Start time"
-                                    date={period.start}
-                                    timeKey="start"
+                                    timeObj={time.start}
+                                    onTimeChange={changeStartTime}
                                 />
                             </div>
                         )}

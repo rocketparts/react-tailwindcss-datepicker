@@ -9,18 +9,17 @@ import {
     START_WEEK
 } from "../constants";
 import {
-    Configs,
-    Period,
-    DateValueType,
-    DateType,
-    DateRangeType,
     ClassNamesTypeProp,
-    PopoverDirectionType,
     ColorKeys,
-    WeekStringType,
+    Configs,
     DateLookingType,
-    TimeObject,
-    Time
+    DateRangeType,
+    DateType,
+    DateValueType,
+    Period,
+    PopoverDirectionType,
+    Time,
+    WeekStringType
 } from "../types";
 
 interface DatepickerStore {
@@ -32,6 +31,7 @@ interface DatepickerStore {
     changeDayHover: (day: DateType) => void;
     changeInputText: (text: string) => void;
     changePeriod: (period: Period) => void;
+    changeTime: (time: Time) => void;
     classNames?: ClassNamesTypeProp;
     configs?: Configs;
     containerClassName?: ((className: string) => string) | string | null;
@@ -55,6 +55,7 @@ interface DatepickerStore {
     minDate?: DateType | null;
 
     period: Period;
+    time: Time;
     placeholder?: string | null;
     popoverDirection?: PopoverDirectionType;
     primaryColor: ColorKeys;
@@ -66,10 +67,6 @@ interface DatepickerStore {
     showFooter?: boolean;
     showTimePicker?: boolean;
     startWeekOn?: WeekStringType | null;
-
-    // Time state
-    time: Time;
-    changeTime: (time: Partial<Time>) => void;
 
     toggleClassName?: ((className: string) => string) | string | null;
     toggleIcon?: (open: boolean) => ReactNode;
@@ -88,6 +85,7 @@ const DatepickerContext = createContext<DatepickerStore>({
     changeDayHover: () => {},
     changeInputText: () => {},
     changePeriod: () => {},
+    changeTime: () => {},
     classNames: undefined,
     configs: undefined,
     containerClassName: "",
@@ -113,6 +111,10 @@ const DatepickerContext = createContext<DatepickerStore>({
     minDate: null,
 
     period: { start: null, end: null },
+    time: {
+        start: { hours: 12, minutes: 0, ampm: "AM" },
+        end: { hours: 12, minutes: 0, ampm: "AM" }
+    },
     popoverDirection: undefined,
     primaryColor: DEFAULT_COLOR,
 
@@ -125,11 +127,6 @@ const DatepickerContext = createContext<DatepickerStore>({
     startWeekOn: START_WEEK,
 
     // Default time state
-    time: {
-        start: { hours: 12, minutes: 0, ampm: "AM" },
-        end: { hours: 12, minutes: 0, ampm: "AM" }
-    },
-    changeTime: () => {},
 
     toggleClassName: "",
     toggleIcon: undefined,

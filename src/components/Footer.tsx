@@ -8,8 +8,15 @@ import SecondaryButton from "./SecondaryButton";
 
 const Footer = () => {
     // Contexts
-    const { hideDatepicker, period, changeDatepickerValue, configs, classNames, time, showTimePicker } =
-        useContext(DatepickerContext);
+    const {
+        hideDatepicker,
+        period,
+        changeDatepickerValue,
+        configs,
+        classNames,
+        time,
+        showTimePicker
+    } = useContext(DatepickerContext);
 
     // Functions
     const getClassName = useCallback(() => {
@@ -22,8 +29,6 @@ const Footer = () => {
 
     // Apply time to a date
     const applyTimeToDate = useCallback((date: Date, timeObj: TimeObject) => {
-        if (!date) return date;
-        
         const newDate = new Date(date);
         const isPM = timeObj.ampm === "PM";
         let hours24 = timeObj.hours;
@@ -42,7 +47,7 @@ const Footer = () => {
 
     return (
         <div className={getClassName()}>
-            <div className="w-full md:w-auto flex items-center justify-center space-x-3">
+            <div className="flex items-center justify-center w-full space-x-3 md:w-auto">
                 <SecondaryButton
                     onClick={() => {
                         hideDatepicker();
@@ -59,7 +64,7 @@ const Footer = () => {
                                 // Apply time information to period dates
                                 const startWithTime = applyTimeToDate(period.start, time.start);
                                 const endWithTime = applyTimeToDate(period.end, time.end);
-                                
+
                                 changeDatepickerValue({
                                     startDate: startWithTime,
                                     endDate: endWithTime

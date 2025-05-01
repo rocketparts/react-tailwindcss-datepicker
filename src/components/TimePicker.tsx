@@ -1,55 +1,48 @@
 import { useCallback, useContext } from "react";
 
 import DatepickerContext from "../contexts/DatepickerContext";
-import { DateType } from "../types";
+import { TimeObject } from "../types";
 
 interface TimePickerProps {
     label: string;
-    date: DateType;
-    timeKey: "start" | "end";
+    timeObj: TimeObject;
+    onTimeChange: (newTime: TimeObject) => void;
 }
 
-const TimePicker = ({ label, timeKey }: TimePickerProps) => {
-    const { primaryColor, disabled, time, changeTime } = useContext(DatepickerContext);
-    const timeObj = time[timeKey];
+const TimePicker = ({ label, timeObj, onTimeChange }: TimePickerProps) => {
+    const { primaryColor, disabled } = useContext(DatepickerContext);
 
     const handleHoursChange = useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>) => {
             const newHours = Number.parseInt(e.target.value, 10);
-            changeTime({
-                [timeKey]: {
-                    ...timeObj,
-                    hours: newHours
-                }
+            onTimeChange({
+                ...timeObj,
+                hours: newHours
             });
         },
-        [timeObj, changeTime, timeKey]
+        [timeObj, onTimeChange]
     );
 
     const handleMinutesChange = useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>) => {
             const newMinutes = Number.parseInt(e.target.value, 10);
-            changeTime({
-                [timeKey]: {
-                    ...timeObj,
-                    minutes: newMinutes
-                }
+            onTimeChange({
+                ...timeObj,
+                minutes: newMinutes
             });
         },
-        [timeObj, changeTime, timeKey]
+        [timeObj, onTimeChange]
     );
 
     const handleAmPmChange = useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>) => {
             const newAmPm = e.target.value as "AM" | "PM";
-            changeTime({
-                [timeKey]: {
-                    ...timeObj,
-                    ampm: newAmPm
-                }
+            onTimeChange({
+                ...timeObj,
+                ampm: newAmPm
             });
         },
-        [timeObj, changeTime, timeKey]
+        [timeObj, onTimeChange]
     );
 
     return (
