@@ -114,7 +114,11 @@ export default function Playground() {
                     asSingle={asSingle}
                     placeholder={placeholder}
                     separator={separator}
-                    startFrom={dateIsValid(new Date(startFrom)) ? new Date(startFrom) : null}
+                    startFrom={
+                        dateIsValid(new Date(startFrom))
+                            ? new Date(new Date(startFrom).setHours(0, 0, 0, 0))
+                            : null
+                    }
                     i18n={i18n}
                     disabled={disabled}
                     inputClassName={inputClassName}

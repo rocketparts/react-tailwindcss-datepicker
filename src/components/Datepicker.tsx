@@ -30,8 +30,8 @@ import {
 } from "../libs/date";
 import { ColorKeys, DateType, DatepickerType, Period } from "../types";
 
-import VerticalDash from "./VerticalDash";
 import Arrow from "./icons/Arrow";
+import VerticalDash from "./VerticalDash";
 
 const Datepicker = (props: DatepickerType) => {
     // Props
@@ -292,17 +292,23 @@ const Datepicker = (props: DatepickerType) => {
 
     // Time picker handlers
     const handleStartTimeChange = useCallback((newDate: Date) => {
-        setPeriod(prev => ({
-            ...prev,
-            start: newDate
-        }));
+        onChange(
+            {
+                startDate: newDate,
+                endDate: period.end
+            },
+            input
+        );
     }, []);
 
     const handleEndTimeChange = useCallback((newDate: Date) => {
-        setPeriod(prev => ({
-            ...prev,
-            end: newDate
-        }));
+        onChange(
+            {
+                startDate: period.end,
+                endDate: newDate
+            },
+            input
+        );
     }, []);
 
     const contextValues = useMemo(() => {
@@ -421,7 +427,6 @@ const Datepicker = (props: DatepickerType) => {
               : defaultPopupClassName;
     }, [popupClassName]);
 
-    console.log(`Start date: ${period.start} End Date: ${period.end}`);
     return (
         <DatepickerContext.Provider value={contextValues}>
             <div className={containerClassNameOverload} ref={containerRef}>
