@@ -95,7 +95,7 @@ const Datepicker = (props: DatepickerType) => {
     });
     const [time, setTime] = useState<Time>({
         start: { hours: 12, minutes: 0, ampm: "AM" },
-        end: { hours: 12, minutes: 0, ampm: "AM" }
+        end: { hours: 11, minutes: 59, ampm: "PM" }
     });
     const [dayHover, setDayHover] = useState<DateType>(null);
     const [inputText, setInputText] = useState<string>("");

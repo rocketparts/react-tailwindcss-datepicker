@@ -113,7 +113,7 @@ const DatepickerContext = createContext<DatepickerStore>({
     period: { start: null, end: null },
     time: {
         start: { hours: 12, minutes: 0, ampm: "AM" },
-        end: { hours: 12, minutes: 0, ampm: "AM" }
+        end: { hours: 11, minutes: 59, ampm: "PM" }
     },
     popoverDirection: undefined,
     primaryColor: DEFAULT_COLOR,
