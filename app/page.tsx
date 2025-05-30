@@ -106,6 +106,10 @@ export default function Playground() {
                                 }
                             }
                         },
+                        // timePicker: {
+                        //     startTime: "test start time",
+                        //     endTime: "test end time"
+                        // },
                         footer: {
                             cancel: "CText",
                             apply: "AText"

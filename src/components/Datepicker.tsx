@@ -458,7 +458,11 @@ const Datepicker = (props: DatepickerType) => {
                                     {showTimePicker && useRange && (
                                         <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
                                             <TimePicker
-                                                label="Start time"
+                                                label={
+                                                    configs?.timePicker?.startTime
+                                                        ? configs.timePicker.startTime
+                                                        : "Start time"
+                                                }
                                                 date={period.start}
                                                 onChange={handleStartTimeChange}
                                             />
@@ -486,7 +490,11 @@ const Datepicker = (props: DatepickerType) => {
                                             {showTimePicker && (
                                                 <div className="px-2 py-1 mt-2 border-t border-gray-300 dark:border-gray-700">
                                                     <TimePicker
-                                                        label="End time"
+                                                        label={
+                                                            configs?.timePicker?.endTime
+                                                                ? configs.timePicker.endTime
+                                                                : "End time"
+                                                        }
                                                         date={period.end}
                                                         onChange={handleEndTimeChange}
                                                     />
