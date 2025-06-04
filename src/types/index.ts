@@ -33,6 +33,10 @@ interface DefaultShortcuts {
 }
 export interface Configs {
     shortcuts?: DefaultShortcuts | CustomShortcuts;
+    timePicker?: {
+        startTime?: string;
+        endTime?: string;
+    };
     footer?: {
         cancel?: string;
         apply?: string;
